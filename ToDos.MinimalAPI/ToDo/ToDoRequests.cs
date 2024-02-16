@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Authorization;
 
 namespace ToDos.MinimalAPI;
 
@@ -9,12 +8,14 @@ public static class ToDoRequests
     {
         app.MapGet("/todos", ToDoRequests.GetAll)
             .Produces<List<ToDo>>()
-            .WithTags("To Dos");   
+            .WithTags("To Dos")
+            .RequireAuthorization();   
         
         app.MapGet("/todos/{id}", ToDoRequests.GetById)
             .Produces<ToDo>()
             .Produces(StatusCodes.Status404NotFound)
-            .WithTags("To Dos");
+            .WithTags("To Dos")
+            .AllowAnonymous();
 
         app.MapPost("/todos", ToDoRequests.Create)
             .Produces<ToDo>(StatusCodes.Status201Created)
@@ -55,6 +56,7 @@ public static class ToDoRequests
         return Results.Ok(todo);
     }
 
+    [Authorize] //same authorization as in endpoint definition but it is a second way to done this.
     public static IResult Create(IToDoService service,ToDo toDo)
     {
         service.Create(toDo);
