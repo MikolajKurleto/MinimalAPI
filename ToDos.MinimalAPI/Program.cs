@@ -20,10 +20,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/todos", (IToDoService service) => service.GetAll());
-app.MapGet("/todos/{id}", ([FromServices]IToDoService service, [FromRoute]Guid id) => service.GetById(id));
-app.MapPost("/todos", (IToDoService service, [FromBody]ToDo toDo) => service.Create(toDo));
-app.MapPut("/todos/{id}", (IToDoService service, Guid id, ToDo toDo) => service.Update(toDo));
-app.MapDelete("/todos/{id}", (IToDoService service, Guid id) => service.Delete(id));
+app.RegisterEndpoints();
 
 app.Run();
